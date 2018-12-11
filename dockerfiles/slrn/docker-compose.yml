@@ -1,0 +1,19 @@
+
+  slrn:
+    image: "i3c/slrn"
+    container_name: "slrn"
+    volumes:
+#      - ${USERDIR}/config:/config
+#      - ${USERDIR}/downloads/completed:/downloads
+#      - ${USERDIR}/tv:/tv
+#      - "/etc/localtime:/etc/localtime:ro"
+      - ${USERDIR}/pull:/var/spool/slrnpull
+#    ports:
+#        - "8989:8989"
+#    restart: always
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+
+

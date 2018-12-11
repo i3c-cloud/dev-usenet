@@ -1,0 +1,17 @@
+
+  sonarr:
+    image: "linuxserver/sonarr"
+    container_name: "sonarr"
+    volumes:
+#      - ${USERDIR}/config:/config
+      - ${USERDIR}/downloads/completed:/downloads
+      - ${USERDIR}/tv:/tv
+      - "/etc/localtime:/etc/localtime:ro"
+      - ${USERDIR}/shared:/shared
+    ports:
+        - "8989:8989"
+#    restart: always
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}

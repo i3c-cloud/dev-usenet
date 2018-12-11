@@ -1,0 +1,23 @@
+version: '2'
+services:
+
+
+  sickrage:
+    extends:
+      file: ../common.yml
+      service: i3c 
+    image: "linuxserver/sickrage"
+    container_name: "sickrage"
+    volumes:
+      - ${USERDIR}/config:/config
+      - ${USERDIR}/downloads/completed:/downloads
+      - ${USERDIR}/tv:/tv
+      - ${USERDIR}/shared:/shared
+    ports:
+      - "8081:8081"
+ #   restart: always
+    environment:
+      - VIRTUAL_PORT=8081
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}

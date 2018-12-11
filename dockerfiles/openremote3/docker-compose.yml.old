@@ -1,0 +1,18 @@
+# NOT USED for now - see i3c-build
+
+
+openremote:
+    container_name: openremote
+#    restart: always
+    image: homeassistant/home-assistant
+    volumes:
+      - ${USERDIR}/config/configuration.yaml:/config/configuration.yaml
+      - /etc/localtime:/etc/localtime:ro
+      - ${USERDIR}/shared:/shared
+    ports:
+      - "8123:8123"
+#    privileged: true
+#    environment:
+#      - PUID=${PUID}
+#      - PGID=${PGID}
+#      - TZ=${TZ}

@@ -1,0 +1,13 @@
+FROM i3c/combox-base
+
+ADD run.sh /run.sh
+RUN chmod a+x /run.sh
+
+RUN echo ""
+ADD entrypoint.sh /entrypoint.sh
+RUN chmod 755 /entrypoint.sh
+
+ADD index_emails.py /toolbox/elasticsearch-gmail/src/index_emails.py
+ 
+#ENTRYPOINT []
+#CMD ["/run.sh"]

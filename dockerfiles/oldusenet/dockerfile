@@ -1,0 +1,23 @@
+FROM haskell:8
+#RUN stack install pandoc pandoc-citeproc
+#ENTRYPOINT ["pandoc"]
+
+WORKDIR /opt/server
+
+RUN cabal update
+
+# Add just the .cabal file to capture dependencies
+COPY ./olduse-net.branchable.com/oldusenet.cabal /opt/server/oldusenet.cabal
+
+# Docker will cache this command as a layer, freeing us up to
+# modify source code without re-installing dependencies
+# (unless the .cabal file changes!)
+RUN cabal install --only-dependencies -j4
+
+# Add and Install Application Code
+COPY ./olduse-net.branchable.com /opt/server
+RUN cabal install
+RUN stack setup
+RUN make all
+
+CMD ["oldusenet"]

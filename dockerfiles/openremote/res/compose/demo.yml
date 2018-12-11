@@ -1,0 +1,162 @@
+# OpenRemote v3
+#
+# By default running this profile installs the stack on https://localhost using a
+# self-signed SSL certificate, with username 'admin' and password 'secret'.
+#
+# Install Docker Community edition (https://docker.com/) on Windows, macOS, or Linux.
+#
+# Start a transient demo stack with:
+#
+#   docker-compose -p openremote -f profile/demo.yml up
+#
+# For full documentation, see deploy.yml
+#
+# Steps to create a permanent installation:
+#
+# 1. DO NOT FORGET TO CHANGE SETUP_ADMIN_PASSWORD!
+#
+# 2. Consider setting a custom DOMAINNAME, LE_EMAIL, and IDENTITY_NETWORK_HOST, see deploy.yml
+#
+# 3. Understand how bind mounts and volume mappings work, see below and read:
+#     https://docs.docker.com/engine/admin/volumes/bind-mounts/
+#     https://docs.docker.com/engine/admin/volumes/volumes/#choose-the--v-or-mount-flag
+#     Survival guide: docker volume ls|rm|prune
+#
+# 4. Execute once:
+#
+#   SETUP_WIPE_CLEAN_INSTALL=true \
+#   SETUP_ADMIN_PASSWORD=secret \
+#   docker-compose -p openremote -f profile/demo.yml up
+#
+# This creates the initial database and optionally imports some examples. Inspect the
+# running installation and ensure it's working. You are now ready to restart the stack
+# without the clean wipe option. Passwords can be changed in the application.
+#
+# Database schemas will be upgraded to new versions of the services automatically, you do
+# not have to wipe all data to install a new version of OpenRemote.
+#
+# Your extension JAR files should be in the manager's ../deployment/extensions/ directory.
+#
+version: '2.2'
+
+# If you enable volume mappings in services, you need this. Otherwise, remove the volumes
+volumes:
+  #proxy-data:
+  #manager-data:
+  postgresql-data:
+
+services:
+
+  # This configuration does not store SSL certificate data and allow changes to the
+  # proxy configuration, it is only configured for deployment on localhost. You can
+  # map a Docker volume or host directory to access/store proxy configuration files
+  # and SSL certificates.
+  proxy:
+    extends:
+      file: ${UDATA}/openremote/profile/deploy.yml
+      service: proxy
+    build:
+      context: '../proxy'
+
+    # Image will be pulled when using the `docker-compose pull` command or `docker-compose up --no-build`
+    image: i3c/openremote/proxy:latest      
+    depends_on:
+      manager:
+        condition: service_healthy
+    environment:
+      # It is important that all services have the same timezone and are time synchronized.
+      # Bearer tokens are only valid for minutes, and authentication fails if Keycloak drifts.
+      TZ: Europe/Warsaw
+      DOMAINNAME: i3c.h       
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      # Store data either in host-mapped directory or a named Docker volume
+      # - ${DEPLOYMENT_DIRECTORY:-../deployment}/proxy:/deployment
+      # - proxy-data:/deployment
+      #
+      # Override the haproxy.cfg with custom file
+      # -${MY_PROXY_CONFIG_FILE}:/etc/haproxy/haproxy.cfg
+
+  # This configuration uses the manager's deployment-specific data such as map tiles,
+  # console application static resources (HTML, JS, CSS), extensions, and other
+  # configuration files which were baked into the managers image.
+  manager:
+    extends:
+      file: ${UDATA}/openremote/profile/deploy.yml
+      service: manager
+    depends_on:
+      keycloak:
+        condition: service_healthy
+    environment:
+      TZ: Europe/Warsaw        
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      # The ../deployment directory is baked into the managers image. Here you can
+      # override it with either a (different) host-mapped directory or a named data volume.
+
+      # Use local deployment data in host-mapped directory for easy development.
+      # - ${DEPLOYMENT_DIRECTORY:-../deployment}/manager:/deployment
+
+      # Use a named volume. When the volume is empty on startup, the files in the manager
+      # image's /deployment directory will be copied into the empty volume, thus
+      # giving you a default configuration to modify. Access the volume with:
+      #
+      # docker run --rm -it -v openremote_manager-data:/deployment debian:stretch /bin/bash
+      # > ls -la /deployment
+      #
+      # To use a volume, enable this:
+      #
+      # - manager-data:/deployment
+
+    environment:
+      TZ: Europe/Warsaw    
+      # This switch can wipe all your Manager and Keycloak data, this is the factory reset!
+      SETUP_WIPE_CLEAN_INSTALL: 'true'
+      # When you are ready to permanently install your project, replace it with the next lines...
+      # SETUP_WIPE_CLEAN_INSTALL: # Allow override on CLI
+      # SETUP_ADMIN_PASSWORD: # Allow override on CLI
+
+  keycloak:
+    extends:
+      file: ${UDATA}/openremote/profile/deploy.yml
+      service: keycloak
+    build:
+      context: '../keycloak'
+
+    # Image will be pulled when using the `docker-compose pull` command or `docker-compose up --no-build`
+    image: i3c/openremote/keycloak:latest      
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    environment:
+      TZ: Europe/Warsaw
+      # CHANGE THIS PASSWORD BEFORE STARTING THE STACK! THIS IS ONLY FOR DEMO!
+      SETUP_ADMIN_PASSWORD: secret
+      # When you are ready to permanently install your project, replace it with the next line ...
+      # SETUP_ADMIN_PASSWORD: # Allow override on CLI
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+
+  # This configuration stores postgresql data in a Docker volume. You manage this volume
+  # independently from your stack with with 'docker volume ls', 'docker volume rm', etc.
+  # Alternatively, you can store postgresql data in a directory on your host.
+  postgresql:
+    extends:
+      file: ${UDATA}/openremote/profile/deploy.yml
+      service: postgresql
+    environment:
+      TZ: Europe/Warsaw      
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      # Store data either in host-mapped directory or a named Docker volume.
+
+      # By default, we use a named volume to avoid permission problems with PostgreSQL.
+      - postgresql-data:/deployment
+
+      # If you use a directory, it must be owned by user:group 5432:5432 and mode 700!
+      #
+      # - ${DEPLOYMENT_DIRECTORY:-../deployment}/postgresql:/deployment

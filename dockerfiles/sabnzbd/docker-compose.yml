@@ -1,0 +1,16 @@
+
+ sabnzbd:
+    image: "linuxserver/sabnzbd"
+    container_name: "sabnzbd"
+    volumes:
+      - ${USERDIR}/config:/config
+      - ${USERDIR}/downloads/completed:/downloads
+      - ${USERDIR}/downloads/incomplete:/incomplete-downloads
+      - ${USERDIR}/shared:/shared
+    ports:
+        - "8080:8080"
+#    restart: always
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}

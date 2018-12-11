@@ -1,0 +1,47 @@
+
+version: "3"
+
+services:
+  nzbhydra:
+    image: "linuxserver/hydra"
+    container_name: "nzbhydra"
+    volumes:
+#     problems with win fs ...    
+      - nzbhydra-vol:/config
+#      - ${USERDIR}/config/settings.cfg:/config/settings.cfg
+#      - ${USERDIR}/config/nzbhydra.log:/config/nzbhydra.log     
+      - ${USERDIR}/downloads:/downloads
+      - ${USERDIR}/shared:/shared
+    ports:
+      - "5075:5075"      
+volumes:
+  nzbhydra-vol:
+
+
+#  services:
+#    nzbhydravol:
+#      image: "i3c/base/vol"
+#      container_name: "nzbhydravol"
+#      volumes:         
+#        - nzbhydra-vol:/config  
+#    nzbhydra:
+#      image: "linuxserver/hydra"
+#      container_name: "nzbhydra"
+#      volumes:   
+#     problems with win fs ...
+#        - nzbhydra-vol:/config
+#        - ${USERDIR}/config/settings.cfg:/config/settings.cfg
+#        - ${USERDIR}/config/nzbhydra.log:/config/nzbhydra.log     
+#        - ${USERDIR}/downloads:/downloads
+#        - ${USERDIR}/shared:/shared
+#      ports:
+#        - "5075:5075"
+##     restart: always
+#      environment:
+#        - PUID=${PUID}
+#        - PGID=${PGID}
+#        - TZ=${TZ}
+#  volumes:
+#    - nzbhydra-vol:  
+
+     

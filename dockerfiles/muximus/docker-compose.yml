@@ -1,0 +1,17 @@
+
+
+  muximux:
+    container_name: muximux
+#    restart: always
+    image: linuxserver/muximux
+    volumes:
+      - ${USERDIR}/config:/config
+      - ${USERDIR}/shared:/shared
+    ports:
+      - "8280:80"
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+
+

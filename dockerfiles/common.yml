@@ -1,0 +1,6 @@
+version: '2'
+services:
+
+  i3c:
+    environment:
+      - I3C_ROOT=/i3c

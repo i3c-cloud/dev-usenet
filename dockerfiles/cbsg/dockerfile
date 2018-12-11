@@ -1,0 +1,19 @@
+FROM i3c/base/ubuntu18
+# Set default WORKDIR
+WORKDIR /source
+
+RUN apt-get update \
+	&& apt-get install -y gnat
+
+RUN sudo apt-get update \
+	&& sudo apt-get -y install  curl unzip
+	
+#RUN git clone https://github.com/AdaCore/xmlada.git \
+#	&& git clone https://github.com/AdaCore/gprbuild.git \
+#	&& cd gprbuild \
+#	&& ./bootstrap.sh --with-xmlada=../xmlada --prefix=/usr/bin
+	
+RUN curl -s https://sourceforge.net/code-snapshots/svn/c/cb/cbsg/code/cbsg-code-r204.zip -o cbsg-code-r204.zip \
+	&& unzip cbsg-code-r204.zip -d cbsg-code \
+	&& cd cbsg-code \
+	&& gprbuild -P delirium

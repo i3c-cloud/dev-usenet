@@ -1,0 +1,14 @@
+FROM openremote/proxy:latest
+
+RUN mkdir /deployment \
+	&& mkdir /deployment/letsencrypt \
+	&& mkdir /deployment/letsencrypt/live \
+	&& mkdir /deployment/letsencrypt/live/i3c.h \
+	&& cd /deployment/letsencrypt/live/i3c.h \
+	&& openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes -subj '/CN=i3c.h' \
+	&& cp cert.pem haproxy.pem \
+	&& cp cert.pem haproxy2.pem \
+	&& cat key.pem >> haproxy.pem
+	
+RUN echo ""	
+	
