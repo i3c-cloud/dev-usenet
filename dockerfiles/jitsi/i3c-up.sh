@@ -6,5 +6,5 @@ if [ ! -e $uData/docker-jitsi-meet/.env ]; then
 fi
 
 docker-compose up -d 
-
+/i nc docker-jitsi-meet_web_1 bridge
 doCommand=false
