@@ -1,7 +1,7 @@
 
 . $i3cDataDir/jitsi/docker-jitsi-meet/.env
 
-dParams="-d -m 100m -p ${JVB_PORT}:${JVB_PORT}/udp -p ${JVB_TCP_PORT}:${JVB_TCP_PORT} \
+dParams="-d -m 200m -p ${JVB_PORT}:${JVB_PORT}/udp -p ${JVB_TCP_PORT}:${JVB_TCP_PORT} \
 	--network=docker-jitsi-meet_meet.jitsi \
 	-v $i3cDataDir/jitsi/config/jvb:/config \
     -e DOCKER_HOST_ADDRESS=$DOCKER_HOST_ADDRESS \
