@@ -1,0 +1,2 @@
+FROM jitsi/jicofo
+#FROM jitsi-base-jicofo

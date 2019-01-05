@@ -1,0 +1,4 @@
+FROM jitsi/prosody
+#FROM jitsi-base-prosody
+
+#EXPOSE 5222 5347 5280

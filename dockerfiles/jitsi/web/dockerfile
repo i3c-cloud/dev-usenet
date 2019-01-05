@@ -1,0 +1,2 @@
+FROM jitsi/web
+#FROM jitsi-base-web

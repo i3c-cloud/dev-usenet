@@ -1,0 +1,2 @@
+FROM jitsi/jvb
+#FROM jitsi-base-jvb
