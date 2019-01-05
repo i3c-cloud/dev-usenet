@@ -5,7 +5,7 @@ _cloneOrPull https://github.com/jitsi/docker-jitsi-meet.git docker-jitsi-meet
 if [ ! -e $uData/docker-jitsi-meet/.env ]; then
 	cp $uData/docker-jitsi-meet/env.example $uData/docker-jitsi-meet/.env
 fi
-
+/i nc docker-jitsi-meet_meet.jitsi
 /i rb jitsi/prosody
 /i rb jitsi/jicofo
 /i rb jitsi/jvb

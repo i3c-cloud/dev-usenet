@@ -1,11 +1,12 @@
 
 . $i3cDataDir/jitsi/docker-jitsi-meet/.env
 #	-v $i3cDataDir/jitsi/config/prosody:/config 
+	-v /home/mb//.jitsi-meet-cfg/prosody:/config \
 dParams="-d -m 50m \
 	--network=docker-jitsi-meet_meet.jitsi \
 	--network-alias xmpp.meet.jitsi \
 	--hostname xmpp.meet.jitsi \
-	-v /home/mb//.jitsi-meet-cfg/prosody:/config \
+	-v $i3cDataDir/jitsi/config/prosody:/config \
     -e ENABLE_AUTH=$ENABLE_AUTH \
     -e ENABLE_GUESTS=$ENABLE_GUESTS \
     -e XMPP_DOMAIN=$XMPP_DOMAIN \
