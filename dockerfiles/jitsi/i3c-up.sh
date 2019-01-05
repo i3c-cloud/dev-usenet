@@ -10,8 +10,8 @@ fi
 /i rb jitsi/jicofo
 /i rb jitsi/jvb
 
-echo "rebuilding jitsi/web..."
-/i rb jitsi/web
+#echo "rebuilding jitsi/web..."
+#/i rb jitsi/web
 
 #cd $uData/docker-jitsi-meet
 #--compatibility - doesn't work limits ignored - back to dockerfiles...
@@ -25,9 +25,9 @@ cd $cdr
 #/i nc  jitsi/jicofo docker-jitsi-meet_meet.jitsi
 /i rr jitsi/jvb
 #/i nc  jitsi/jvb docker-jitsi-meet_meet.jitsi
-/i rr jitsi/web
+#/i rr jitsi/web
  
-/i nc jitsi/web bridge
+#/i nc jitsi/web bridge
 #/i nc  jitsi/web docker-jitsi-meet_meet.jitsi
 
 

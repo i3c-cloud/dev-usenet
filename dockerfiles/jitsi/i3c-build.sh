@@ -2,4 +2,4 @@
 
 
 
-doCommand=false
+#doCommand=false
