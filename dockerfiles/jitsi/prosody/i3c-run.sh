@@ -1,7 +1,7 @@
 
 . $i3cDataDir/jitsi/docker-jitsi-meet/.env
 #	-v $i3cDataDir/jitsi/config/prosody:/config 
-	-v /home/mb//.jitsi-meet-cfg/prosody:/config \
+#	-v /home/mb//.jitsi-meet-cfg/prosody:/config 
 dParams="-d -m 50m \
 	--network=docker-jitsi-meet_meet.jitsi \
 	--network-alias xmpp.meet.jitsi \
