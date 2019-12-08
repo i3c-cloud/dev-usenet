@@ -1,4 +1,6 @@
+export Your macros as json files to
 
+/i3c/.secrets/.secrets/kantu
 
 refs:
 https://askubuntu.com/questions/426750/how-can-i-update-my-nodejs-to-the-latest-version
