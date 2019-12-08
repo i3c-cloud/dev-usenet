@@ -1,4 +1,9 @@
 
+if [ ! -e /etc/timezone ]; then
+	echo "The /etc/timezone file not exists. Create one with ie: echo \"Europe/Warsaw\" > /etc/timezone"
+	exit 1
+fi
+
 id -u openhab
 if [ $? -eq 0 ]; then
     echo "User openhab exists"
