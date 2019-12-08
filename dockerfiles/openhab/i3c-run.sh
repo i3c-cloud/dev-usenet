@@ -13,6 +13,12 @@ fi
 	mkdir -p $uData/userdata
 	mkdir -p $uData/addons
 	chown -R openhab:openhab $uData
+	
+oh_uinfo=$(id openhab)
+set -- $oh_uinfo
+oh_uid=$(echo $1 | cut -d'=' -f 2 | cut -d'(' -f 1)
+oh_gid=$(echo $2 | cut -d'=' -f 2 | cut -d'(' -f 1)
+
 
 dParams="-d \
         --name openhab \
@@ -21,6 +27,6 @@ dParams="-d \
         -v /etc/timezone:/etc/timezone:ro \
         -v $uData/conf:/openhab/conf \
         -v $uData/userdata:/openhab/userdata \
-        -v $uData/addons:/openhab/addons"
- #       -e USER_ID=<uid> \
- #       -e GROUP_ID=<gid>"
+        -v $uData/addons:/openhab/addons \
+        -e USER_ID=$oh_uid \
+        -e GROUP_ID=$oh_gid"
